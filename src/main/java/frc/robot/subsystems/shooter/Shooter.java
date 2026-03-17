@@ -18,19 +18,27 @@ public class Shooter extends SubsystemBase {
     Logger.processInputs("Shooter", inputs);
   }
 
-  public void setSpeed(double speed) {
-    io.setSpeed(speed);
+  public void setShootSpeed(double speed) {
+    io.setShootSpeed(speed);
+  }
+
+  public void setFeedSpeed(double speed) {
+    io.setFeedSpeed(speed);
   }
 
   public void stop() {
     io.stop();
   }
 
-  public double getVelocityRPM() {
-    return inputs.velocityRPM;
+  public double getShootVelocityRPM() {
+    return inputs.shootVelocityRPM;
+  }
+
+  public double getFeedVelocityRPM() {
+    return inputs.feedVelocityRPM;
   }
 
   public boolean atTargetRPM(double targetRPM) {
-    return Math.abs(inputs.velocityRPM - targetRPM) < 100.0;
+    return Math.abs(inputs.shootVelocityRPM - targetRPM) < 100.0;
   }
 }

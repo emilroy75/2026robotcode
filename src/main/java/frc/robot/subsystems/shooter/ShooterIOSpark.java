@@ -1,54 +1,63 @@
 package frc.robot.subsystems.shooter;
 
-import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkMaxConfig;
 
 public class ShooterIOSpark implements ShooterIO {
 
-  private final SparkMaxmotor1;
-  private final SparkMaxmotor2;
-  private final SparkMaxmotor3;
-  private final RelativeEncoder encoder1;
-  private final RelativeEncoder encoder2;
-  private final RelativeEncoder encoder3;
+  private final SparkMax shootMotor1;
+  private final SparkMax shootMotor2;
+  private final SparkMax feedMotor;
 
-  public ShooterIOSpark(int canId1, int canId2, int canId3) {
-    motor1 = new SparkMax(canId1, MotorType.kBrushless);
-    motor2 = new SparkMax(canId2, MotorType.kBrushless);
-    motor3 = new SparkMax(canId3, MotorType.kBrushless);
+  public ShooterIOSpark(int shootCanId1, int shootCanId2, int feedCanId) {
+    shootMotor1 = new SparkMax(shootCanId1, MotorType.kBrushless);
+    shootMotor2 = new SparkMax(shootCanId2, MotorType.kBrushless);
+    feedMotor = new SparkMax(feedCanId, MotorType.kBrushless);
 
-    encoder1 = motor1.getEncoder();
-    encoder2 = motor2.getEncoder();
-    encoder3 = motor3.getEncoder();
+    var shootConfig = new SparkMaxConfig();
+    shootConfig.idleMode(IdleMode.kCoast).smartCurrentLimit(40);
 
-    for (SparkMaxmotor : new SparkMax[] {motor1, motor2, motor3}) {
-      motor.restoreFactoryDefaults();
-      motor.setSmartCurrentLimit(40);
-      motor.setIdleMode(IdleMode.kCoast);
-      motor.burnFlash();
-    }
+    var feedConfig = new SparkMaxConfig();
+    feedConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(20);
+
+    shootMotor1.configure(
+        shootConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    shootMotor2.configure(
+        shootConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    feedMotor.configure(feedConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
   @Override
   public void updateInputs(ShooterIOInputs inputs) {
-    inputs.velocityRPM = encoder1.getVelocity();
-    inputs.appliedVolts = motor1.getAppliedOutput() * motor1.getBusVoltage();
-    inputs.currentAmps = motor1.getOutputCurrent();
-    inputs.motorConnected = true;
+    inputs.shootVelocityRPM = shootMotor1.getEncoder().getVelocity();
+    inputs.feedVelocityRPM = feedMotor.getEncoder().getVelocity();
+    inputs.shootAppliedVolts = shootMotor1.getAppliedOutput() * shootMotor1.getBusVoltage();
+    inputs.feedAppliedVolts = feedMotor.getAppliedOutput() * feedMotor.getBusVoltage();
+    inputs.shootCurrentAmps = shootMotor1.getOutputCurrent();
+    inputs.feedCurrentAmps = feedMotor.getOutputCurrent();
+    inputs.shootMotorsConnected = true;
+    inputs.feedMotorConnected = true;
   }
 
   @Override
-  public void setSpeed(double speed) {
-    motor1.set(speed);
-    motor2.set(speed);
-    motor3.set(speed);
+  public void setShootSpeed(double speed) {
+    shootMotor1.set(speed);
+    shootMotor2.set(speed);
+  }
+
+  @Override
+  public void setFeedSpeed(double speed) {
+    feedMotor.set(speed);
   }
 
   @Override
   public void stop() {
-    motor1.set(0.0);
-    motor2.set(0.0);
-    motor3.set(0.0);
+    shootMotor1.set(0.0);
+    shootMotor2.set(0.0);
+    feedMotor.set(0.0);
   }
 }

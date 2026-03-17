@@ -28,9 +28,9 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
-import java.util.Set;
 
 public class DriveCommands {
   private static final double DEADBAND = 0.1;
