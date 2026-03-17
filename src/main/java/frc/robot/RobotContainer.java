@@ -10,7 +10,6 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -26,6 +25,11 @@ import frc.robot.subsystems.drive.GyroIONavX;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSpark;
+import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.shooter.ShooterConstants;
+import frc.robot.subsystems.shooter.ShooterIO;
+import frc.robot.subsystems.shooter.ShooterIOSim;
+import frc.robot.subsystems.shooter.ShooterIOSpark;
 import frc.robot.subsystems.vision.FuelDetection;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionConstants;
@@ -46,8 +50,10 @@ public class RobotContainer {
   private final Vision vision;
   private final FuelDetection fuelDetection = new FuelDetection();
   private final FuelTrackingCommand fuelTracking;
+  private final Shooter shooter;
   // Controller
-  private final CommandXboxController controller = new CommandXboxController(0);
+  private final CommandXboxController driverController = new CommandXboxController(0);
+  private final CommandXboxController manipulatorController = new CommandXboxController(1);
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -70,6 +76,12 @@ public class RobotContainer {
                 new VisionIOPhotonVision("Front_Camera", VisionConstants.robotToCamera0),
                 new VisionIOPhotonVision("Left_Camera", VisionConstants.robotToCamera1),
                 new VisionIOPhotonVision("Right_Camera", VisionConstants.robotToCamera2));
+        shooter =
+            new Shooter(
+                new ShooterIOSpark(
+                    ShooterConstants.shootMotor1CanId,
+                    ShooterConstants.shootMotor2CanId,
+                    ShooterConstants.feedMotorCanId));
         break;
 
       case SIM:
@@ -90,6 +102,7 @@ public class RobotContainer {
                     "Left_Camera", VisionConstants.robotToCamera1, drive::getPose),
                 new VisionIOPhotonVisionSim(
                     "Right_Camera", VisionConstants.robotToCamera2, drive::getPose));
+        shooter = new Shooter(new ShooterIOSim());
         break;
 
       default:
@@ -107,6 +120,7 @@ public class RobotContainer {
                 new VisionIO() {},
                 new VisionIO() {},
                 new VisionIO() {});
+        shooter = new Shooter(new ShooterIO() {});
         break;
     }
     fuelTracking = new FuelTrackingCommand(drive, fuelDetection);
@@ -145,25 +159,25 @@ public class RobotContainer {
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
             drive,
-            () -> -controller.getLeftY(),
-            () -> -controller.getLeftX(),
-            () -> -controller.getRightX()));
+            () -> -driverController.getLeftY(),
+            () -> -driverController.getLeftX(),
+            () -> -driverController.getRightX()));
 
     // Lock to 0° when A button is held
-    controller
+    driverController
         .a()
         .whileTrue(
             DriveCommands.joystickDriveAtAngle(
                 drive,
-                () -> -controller.getLeftY(),
-                () -> -controller.getLeftX(),
+                () -> -driverController.getLeftY(),
+                () -> -driverController.getLeftX(),
                 () -> Rotation2d.kZero));
 
     // Switch to X pattern when X button is pressed
-    controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
+    driverController.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
 
     // Reset gyro to 0° when B button is pressed
-    controller
+    driverController
         .b()
         .onTrue(
             Commands.runOnce(
@@ -174,24 +188,7 @@ public class RobotContainer {
                 .ignoringDisable(true));
 
     // turn 45 degrees
-    controller
-        .y()
-        .onTrue(
-            Commands.runOnce(
-                () -> {
-                  Rotation2d targetAngle =
-                      drive.getPose().getRotation().plus(Rotation2d.fromDegrees(45.0));
-                  Commands.run(() -> drive.runVelocity(new ChassisSpeeds(0.0, 0.0, 2.0)), drive)
-                      .until(
-                          () ->
-                              Math.abs(
-                                      drive.getPose().getRotation().minus(targetAngle).getDegrees())
-                                  < 2.0)
-                      .andThen(
-                          Commands.runOnce(
-                              () -> drive.runVelocity(new ChassisSpeeds(0.0, 0.0, 0.0)), drive))
-                      .schedule();
-                }));
+    driverController.y().onTrue(DriveCommands.rotateByDegrees(drive, 45.0));
   }
 
   /**

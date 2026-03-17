@@ -1,7 +1,7 @@
 package frc.robot.subsystems.shooter;
 
-import com.revrobotics.spark.SparkBase.PersistMode;
-import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.PersistMode;
+import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
@@ -19,10 +19,10 @@ public class ShooterIOSpark implements ShooterIO {
     feedMotor = new SparkMax(feedCanId, MotorType.kBrushless);
 
     var shootConfig = new SparkMaxConfig();
-    shootConfig.idleMode(IdleMode.kCoast).smartCurrentLimit(40);
+    shootConfig.idleMode(IdleMode.kCoast).smartCurrentLimit(ShooterConstants.shootCurrentLimit);
 
     var feedConfig = new SparkMaxConfig();
-    feedConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(20);
+    feedConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(ShooterConstants.feedCurrentLimit);
 
     shootMotor1.configure(
         shootConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
