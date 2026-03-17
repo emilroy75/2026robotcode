@@ -1,29 +1,28 @@
 package frc.robot.subsystems.shooter;
 
-import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 public class ShooterIOSpark implements ShooterIO {
 
-  private final CANSparkMax motor1;
-  private final CANSparkMax motor2;
-  private final CANSparkMax motor3;
+  private final SparkMaxmotor1;
+  private final SparkMaxmotor2;
+  private final SparkMaxmotor3;
   private final RelativeEncoder encoder1;
   private final RelativeEncoder encoder2;
   private final RelativeEncoder encoder3;
 
   public ShooterIOSpark(int canId1, int canId2, int canId3) {
-    motor1 = new CANSparkMax(canId1, MotorType.kBrushless);
-    motor2 = new CANSparkMax(canId2, MotorType.kBrushless);
-    motor3 = new CANSparkMax(canId3, MotorType.kBrushless);
+    motor1 = new SparkMax(canId1, MotorType.kBrushless);
+    motor2 = new SparkMax(canId2, MotorType.kBrushless);
+    motor3 = new SparkMax(canId3, MotorType.kBrushless);
 
     encoder1 = motor1.getEncoder();
     encoder2 = motor2.getEncoder();
     encoder3 = motor3.getEncoder();
 
-    for (CANSparkMax motor : new CANSparkMax[] {motor1, motor2, motor3}) {
+    for (SparkMaxmotor : new SparkMax[] {motor1, motor2, motor3}) {
       motor.restoreFactoryDefaults();
       motor.setSmartCurrentLimit(40);
       motor.setIdleMode(IdleMode.kCoast);

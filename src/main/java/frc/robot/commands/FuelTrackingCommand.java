@@ -66,7 +66,7 @@ public class FuelTrackingCommand extends Command {
     if (currentPathCommand == null) {
       currentPathCommand =
           AutoBuilder.pathfindToPose(
-              new Pose2d(0.0, 0.0, new Rotation2d(0.0)), // ← replace with zone position
+              new Pose2d(0.0, 0.0, new Rotation2d(0.0)), //  zone position
               new PathConstraints(
                   3.0, 4.0, Units.degreesToRadians(540), Units.degreesToRadians(720)),
               0.0);
@@ -114,7 +114,7 @@ public class FuelTrackingCommand extends Command {
     if (currentPathCommand == null) {
       currentPathCommand =
           AutoBuilder.pathfindToPose(
-              new Pose2d(0.0, 0.0, new Rotation2d(0.0)), // ← replace with scoring position
+              new Pose2d(0.0, 0.0, new Rotation2d(0.0)), // scoring position
               new PathConstraints(
                   3.0, 4.0, Units.degreesToRadians(540), Units.degreesToRadians(720)),
               0.0);

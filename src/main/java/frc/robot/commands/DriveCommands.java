@@ -30,6 +30,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
+import java.util.Set;
 
 public class DriveCommands {
   private static final double DEADBAND = 0.1;
@@ -290,7 +291,7 @@ public class DriveCommands {
     double gyroDelta = 0.0;
   }
 
-    public static Command rotateByDegrees(Drive drive, double degrees) {
+  public static Command rotateByDegrees(Drive drive, double degrees) {
     return Commands.defer(
         () -> {
           double targetDegrees = Math.IEEEremainder(drive.getHeadingDegrees() + degrees, 360.0);
