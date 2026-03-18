@@ -8,6 +8,10 @@
 package frc.robot;
 
 import com.revrobotics.util.StatusLogger;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import org.littletonrobotics.junction.LogFileUtil;
@@ -18,11 +22,6 @@ import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import org.littletonrobotics.urcl.URCL;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
-
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -32,10 +31,10 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 public class Robot extends LoggedRobot {
   private Command autonomousCommand;
   private RobotContainer robotContainer;
-  public static Pose2d HubPose = new Pose2d(0,0, new Rotation2d(0));
+  public static Pose2d HubPose = new Pose2d(0, 0, new Rotation2d(0));
 
   public Robot() {
-    
+
     // Record metadata
     Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
     Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
@@ -71,13 +70,13 @@ public class Robot extends LoggedRobot {
         Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")));
         break;
     }
-    if (DriverStation.getAlliance().isPresent()&&DriverStation.getAlliance().get() == Alliance.Red){
-      HubPose = new Pose2d(0,0, new Rotation2d(0));
+    if (DriverStation.getAlliance().isPresent()
+        && DriverStation.getAlliance().get() == Alliance.Red) {
+      HubPose = new Pose2d(0, 0, new Rotation2d(0));
+    } else if (DriverStation.getAlliance().isPresent()
+        && DriverStation.getAlliance().get() == Alliance.Blue) {
+      HubPose = new Pose2d(0, 0, new Rotation2d(0));
     }
-    else if (DriverStation.getAlliance().isPresent()&&DriverStation.getAlliance().get() == Alliance.Blue) {
-      HubPose = new Pose2d(0,0, new Rotation2d(0));
-    }
-    
 
     // Initialize URCL
     Logger.registerURCL(URCL.startExternal());

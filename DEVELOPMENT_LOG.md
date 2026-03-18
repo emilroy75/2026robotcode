@@ -18,12 +18,18 @@
 
 ## 4. Advanced Trajectory Math
 - **Method:** `ShooterMath.java` uses a physics-based projectile motion formula rather than a simple linear line.
-- **Workflow:** 
+- **Workflow:**
   1. `getDistanceToSpeaker(drive.getPose())`
   2. `calculateTrajectoryVelocity(distance)` -> Returns meters per second.
   3. `velocityToRPM(velocity)` -> Returns final motor RPM.
+  4. `calculateEnergyBoost(velocity)` -> Adds RPM to compensate for ball impact.
 - **Benefits:** Accounts for gravity, hub height, and fixed launch angle.
 
 ## 5. Control System
 - **Driver (0):** Swerve and gyro controls.
 - **Operator (1):** Shooter automation (Right Trigger for auto-shoot, Left Trigger for manual feed).
+- **Command Factory:** Implemented `ShooterCommands.java` to centralize all shooter logic (Auto-Aim + Spin-Up + Feed) without separate files.
+
+## 6. Fixes & Cleanup
+- **Typo Resolution:** Fixed `Commannds` -> `Commands` in `ShooterCommands.java`.
+- **Import Resolution:** Added `edu.wpi.first.wpilibj2.command.Commands` to resolve command factory errors.
