@@ -16,4 +16,5 @@ public class ShooterConstants {
   public static final double feedMOI = 0.001;
   public static final double shootReduction = 5.0;
   public static final double feedReduction = 5.0;
+  public static final double SHOOT_BELT_RATIO = 1.0;
 }

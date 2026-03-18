@@ -4,6 +4,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import frc.robot.Robot;
+import frc.robot.subsystems.shooter.ShooterConstants;
 
 public class ShooterMath {
   public static final double WHEEL_RADIUS = Units.inchesToMeters(2.0);
@@ -29,7 +30,8 @@ public class ShooterMath {
   }
 
   public static double velocityToRPM(double velocity) {
-    return (velocity / WHEEL_RADIUS) * 60 / (2.0 * Math.PI);
+    double wheelRPM = (velocity / WHEEL_RADIUS) * 60 / (2.0 * Math.PI);
+    return wheelRPM*ShooterConstants.SHOOT_BELT_RATIO;
   }
 
   public static double calculateEnergyCompensation(double velocity) {

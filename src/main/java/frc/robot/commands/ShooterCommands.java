@@ -23,7 +23,7 @@ public class ShooterCommands extends Command {
 
           double distance = ShooterMath.getDistanceToHub(currentPose);
           double targetRPM = ShooterMath.getFinalRPM(distance);
-          shooter.setShootSpeed(targetRPM);
+          shooter.setShootVelocity(targetRPM);
 
           if (shooter.atTargetRPM(targetRPM)) {
             shooter.setFeedSpeed(0.6);

@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Robot;
 // import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveConstants;
@@ -114,7 +115,7 @@ public class FuelTrackingCommand extends Command {
     if (currentPathCommand == null) {
       currentPathCommand =
           AutoBuilder.pathfindToPose(
-              new Pose2d(0.0, 0.0, new Rotation2d(0.0)), // scoring position
+              Robot.HubPose, // scoring position
               new PathConstraints(
                   3.0, 4.0, Units.degreesToRadians(540), Units.degreesToRadians(720)),
               0.0);

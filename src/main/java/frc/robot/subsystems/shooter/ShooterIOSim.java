@@ -1,6 +1,7 @@
 package frc.robot.subsystems.shooter;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 
@@ -23,6 +24,7 @@ public class ShooterIOSim implements ShooterIO {
 
   private double shootAppliedVolts = 0.0;
   private double feedAppliedVolts = 0.0;
+  private final PIDController shootController = new PIDController(0.01, 0.0, 0.0);
 
   @Override
   public void updateInputs(ShooterIOInputs inputs) {
@@ -41,8 +43,16 @@ public class ShooterIOSim implements ShooterIO {
   }
 
   @Override
+  public void setShootVelocity(double rpm) {
+    shootAppliedVolts = shootController.calculate(shootSim.getAngularVelocityRPM(), rpm);
+    shootAppliedVolts = MathUtil.clamp(shootAppliedVolts, -12.0, 12.0);
+    shootSim.setInputVoltage(shootAppliedVolts);
+  }
+
+  @Override
   public void setShootSpeed(double speed) {
-    shootAppliedVolts = MathUtil.clamp(speed * 12.0, -12.0, 12.0);
+    shootAppliedVolts = speed * 12.0;
+    shootSim.setInputVoltage(shootAppliedVolts);
   }
 
   @Override
