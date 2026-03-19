@@ -39,6 +39,6 @@ Pully Diameter = 0.75"
 Gear Ratio = 27:1  
 
 ### Agitator
-Agtator Diameter (Star Wheels) = 6.2336"
-Agtator Diameter (Brush Tips) = 9.6734"
-Gear Ratio (Total) = 32:1
+Agtator Diameter (Star Wheels) = 6.2336"  
+Agtator Diameter (Brush Tips) = 9.6734"  
+Gear Ratio (Total) = 32:1  
