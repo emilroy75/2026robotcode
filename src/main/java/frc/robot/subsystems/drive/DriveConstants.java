@@ -48,7 +48,7 @@ public class DriveConstants {
   public static final int backRightTurnCanId = 8;
 
   // Drive motor configuration
-  public static final int driveMotorCurrentLimit = 30;
+  public static final int driveMotorCurrentLimit = 60;
   public static final double wheelRadiusMeters = Units.inchesToMeters(1.5);
   public static final double driveMotorReduction = (45.0 * 22.0) / (13.0 * 15.0);
   public static final DCMotor driveGearbox = DCMotor.getNeoVortex(1);
@@ -73,7 +73,7 @@ public class DriveConstants {
 
   // Turn motor configuration
   public static final boolean turnInverted = false;
-  public static final int turnMotorCurrentLimit = 20;
+  public static final int turnMotorCurrentLimit = 40;
   public static final double turnMotorReduction = 9424.0 / 203.0;
   public static final DCMotor turnGearbox = DCMotor.getNEO(1);
 
