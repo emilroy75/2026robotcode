@@ -28,6 +28,8 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.geometry.Rotation2d;
+import frc.robot.Robot;
+
 import java.util.Queue;
 import java.util.function.DoubleSupplier;
 
@@ -99,7 +101,7 @@ public class ModuleIOSpark implements ModuleIO {
         .idleMode(IdleMode.kBrake)
         .smartCurrentLimit(driveMotorCurrentLimit)
         .voltageCompensation(12.0);
-    driveConfig.inverted(false);
+    driveConfig.inverted(Robot.turnMotorInverted);//TODO get this fixed 
     driveConfig
         .encoder
         .positionConversionFactor(driveEncoderPositionFactor)

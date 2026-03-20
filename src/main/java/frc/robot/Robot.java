@@ -32,6 +32,7 @@ public class Robot extends LoggedRobot {
   private Command autonomousCommand;
   private RobotContainer robotContainer;
   public static Pose2d HubPose = new Pose2d(0, 0, new Rotation2d(0));
+  public static boolean turnMotorInverted = true;
 
   public Robot() {
 
@@ -73,9 +74,12 @@ public class Robot extends LoggedRobot {
     if (DriverStation.getAlliance().isPresent()
         && DriverStation.getAlliance().get() == Alliance.Red) {
       HubPose = new Pose2d(182, 158, new Rotation2d(0));
+      turnMotorInverted = false;
+      
     } else if (DriverStation.getAlliance().isPresent()
         && DriverStation.getAlliance().get() == Alliance.Blue) {
       HubPose = new Pose2d(468, 158, new Rotation2d(0));
+      turnMotorInverted = true;
     }
 
     // Initialize URCL
