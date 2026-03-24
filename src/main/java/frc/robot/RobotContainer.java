@@ -30,6 +30,8 @@ import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSpark;
 import frc.robot.subsystems.intake.*;
 import frc.robot.subsystems.shooter.*;
+import frc.robot.util.ShooterMath;
+
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -45,7 +47,7 @@ public class RobotContainer {
   // private final FuelDetection fuelDetection = new FuelDetection();
   //   private final FuelTrackingCommand fuelTracking;
   private final Shooter shooter;
-  //   private final Intake intake;
+  private final Intake intake;
   //   private final Climber climber;
   private final Agitator agitator;
 
@@ -80,9 +82,9 @@ public class RobotContainer {
                     ShooterConstants.shootFrontCanId,
                     ShooterConstants.shootBackCanId,
                     ShooterConstants.feedMotorCanId));
-        // intake =
-        //     new Intake(new IntakeIOSpark(IntakeConstants.deployCanId,
-        // IntakeConstants.rollerCanId));
+        intake =
+            new Intake(new IntakeIOSpark(IntakeConstants.deployCanId,
+        IntakeConstants.rollerCanId));
         // climber = new Climber(new ClimberIOSpark());
         agitator = new Agitator(new AgitatorIOSpark());
         break;
@@ -106,7 +108,7 @@ public class RobotContainer {
         //         new VisionIOPhotonVisionSim(
         //             "Right_Camera", VisionConstants.robotToCamera2, drive::getPose));
         shooter = new Shooter(new ShooterIOSim());
-        // intake = new Intake(new IntakeIOSim());
+        intake = new Intake(new IntakeIOSim());
         // climber = new Climber(new ClimberIOSim());
         agitator = new Agitator(new AgitatorIOSim());
         break;
@@ -127,7 +129,7 @@ public class RobotContainer {
         //         new VisionIO() {},
         //         new VisionIO() {});
         shooter = new Shooter(new ShooterIO() {});
-        // intake = new Intake(new IntakeIO() {});
+        intake = new Intake(new IntakeIO() {});
         // climber = new Climber(new ClimberIO() {});
         agitator = new Agitator(new AgitatorIO() {});
         break;
@@ -212,6 +214,17 @@ public class RobotContainer {
         .leftTrigger()
         .onTrue(BallHandlingCommands.spinShooter(shooter, 0.85))
         .onFalse(BallHandlingCommands.stopShooter(shooter));
+    driverController
+        .rightTrigger()
+        .whileTrue((Commands.runEnd(() -> intake.setRollerSpeed(.75),
+            ()-> intake.stop(), intake)));
+    // auto aim 
+    driverController
+        .rightBumper()
+        .whileTrue(DriveCommands.joystickDriveAtAngle(drive, 
+        () -> driverController.getLeftX(),
+        () -> driverController.getLeftY(),
+        () -> ShooterMath.getAngleToHub(drive.getPose())));
   }
 
   /**
