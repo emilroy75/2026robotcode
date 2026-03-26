@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -31,6 +32,7 @@ import frc.robot.subsystems.drive.ModuleIOSpark;
 import frc.robot.subsystems.intake.*;
 import frc.robot.subsystems.shooter.*;
 import frc.robot.util.ShooterMath;
+
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -156,7 +158,13 @@ public class RobotContainer {
     autoChooser.addOption(
         "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
     autoChooser.addOption("Combo-Auto", ComboAuton.shootFuel(shooter, agitator));
-
+    autoChooser.addOption("Shooter Sysid (Quastatic)", 
+    shooter.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+    autoChooser.addOption("Shooter Sysid (Dynamic)",
+    shooter.sysIdDynamic(SysIdRoutine.Direction.kForward));
+    //configure smartdashboard
+    SmartDashboard.putNumber("speed", 0);
+    double TargetSpeed = SmartDashboard.getNumber("speed", 0);
     // Configure the button bindings
     configureButtonBindings();
   }

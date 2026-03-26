@@ -21,10 +21,10 @@ public class ShooterConstants {
   public static final double feedMOI = 0.00003;
 
   // Inertia (Total for 4 wheels)
-  public static final double totalWheelMOI = 0.001404;
+  public static final double totalWheelMOI = 0.001755;
 
   // Gearing & Belts
-  public static final double shootBeltRatio = 24.0 / 30.0; // 0.8 (Overdrive)
+  public static final double shootBeltRatio = 24.0 / 30.0; 
   public static final double shootReduction = 0.8;
   public static final double feedReduction = 2.18;
   // Motor Configuration
@@ -36,4 +36,6 @@ public class ShooterConstants {
   // PID Tuning
   public static final double shootKp = 0.0001;
   public static final double shootKv = 0.00017;
+  public static final double shootKs = 0.0001;
+  public static final double shootKa = 0.0012;
 }
